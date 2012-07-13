@@ -41,16 +41,14 @@ def load_movie_dictionary(filename):
 def movie_details(id, all_movies):
 	movie_lookup = all_movies[id]
 	title = movie_lookup['title']
-	# calls dictionary with movie_id and formats values in certain way
-	 
-	#print movie_lookup.items()
+	#print "%s" % #genres that have a value of 1
 	genre_list = []
 	for key, value in movie_lookup.items():
 		if value == '1' and key != movie_lookup['id']: 
 			genre_list.append(key)
 	genres = (", ").join(genre_list)
 	print "Movie %s: %s\n%s" %(id, title, genres)
-	#print "%s" % #genres that have a value of 1
+	
 
 def load_rating_dictionary(filename):
 	ratings = open(filename)
@@ -130,26 +128,19 @@ def predict(target_movie_id, rating_dictionary, movie_dictionary):
 			predicted_rating = similarity * rating
 
 	print "Best guess for movie %s: %s is %.1f stars" %(movie_id, title, predicted_rating)
-# > predict 1
-# Best guess for movie 1: Toy Story (1995) is 4.5 stars
 
 def main():
-	# movie_db = movie_dictionary("../ml-100k/u.item")
 	ratings = load_rating_dictionary("../ml-100k/u.data")
 	movie_db = load_movie_dictionary("../ml-100k/u.item")
 	users = load_user_dictionary("../ml-100k/u.user")
 	movie_details('43', movie_db)
-
 	average_movie_rating('42', ratings)
-	# user_dictionary("../ml-100k/u.user")
 	get_user('483', users)
 	user_rating('42', '845', ratings)
 	rate('42', 3, movie_db)
 	rate('588', 5, movie_db)
 	rate('71', 5, movie_db)
 	rate('890', 2, movie_db)
-
-
 	predict('1', ratings, movie_db)
 
 if __name__ == '__main__':
