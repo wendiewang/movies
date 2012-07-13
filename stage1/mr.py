@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 from math import sqrt
 import correlation
+import cmd 
+#import memcache 
 
 g_crud = {} # current ratings user dictionary
+#g_crud = memcache.client(["localhost:11211"], debug=0) 
 
 def load_movie_dictionary(filename):
 	item_file = open(filename)
@@ -110,7 +113,7 @@ def rate(movie_id, rating, movie_dictionary):
 	movie = movie_dictionary.get(movie_id)
 	title = movie['title']
 	g_crud[movie_id] = rating 
-	print "You have rated movie %s: %s at %d stars" % (movie_id, title, rating)
+	print "You have rated movie %s: %s at %d stars" % (movie_id, title, rating)  #%d 
 
 
 def predict(target_movie_id, rating_dictionary, movie_dictionary):
@@ -127,25 +130,61 @@ def predict(target_movie_id, rating_dictionary, movie_dictionary):
 			best_correlation = similarity
 			predicted_rating = similarity * rating
 
-	print "Best guess for movie %s: %s is %.1f stars" %(movie_id, title, predicted_rating)
+	print "Best guess for movie %s: %s is %.1f stars" %(movie_id, title, predicted_rating)  #%.1f
 
 def main():
 	ratings = load_rating_dictionary("../ml-100k/u.data")
 	movie_db = load_movie_dictionary("../ml-100k/u.item")
 	users = load_user_dictionary("../ml-100k/u.user")
-	movie_details('43', movie_db)
-	average_movie_rating('42', ratings)
-	get_user('483', users)
-	user_rating('42', '845', ratings)
-	rate('42', 3, movie_db)
-	rate('588', 5, movie_db)
-	rate('71', 5, movie_db)
-	rate('890', 2, movie_db)
-	predict('1', ratings, movie_db)
+	# movie_details('43', movie_db)
+	# average_movie_rating('42', ratings)
+	# get_user('483', users)
+	# user_rating('42', '845', ratings)
+	# rate('42', 3, movie_db)
+	# rate('588', 5, movie_db)
+	# rate('71', 5, movie_db)
+	# rate('890', 2, movie_db)
+	# predict('1', ratings, movie_db)
+	print """
+here are the following commands to use our movie database
+movie [movie_id] -- gets you details on the movie
+average_movie_rating [movie_id] -- gets you the average rating of the movie 
+user [user_id] -- gets you information on the user 
+user_rating [movie_id] [user_id] -- gets you the rating of a specific user and movie 
+rate [movie_id] [rating] -- lets you add a movie rating to your user
+predict [movie_id] -- gives you a prediction of how much you will like the movie 
+
+enter q to quit 
+"""
+	# while True:
+	# 	comm = raw_input("> ")
+	# 	comm = comm.split(" ")
+
+	# 	if comm[0] == 'q':
+	# 		break
+	# 	else: 
+	# 		if comm[0] == "movie": 
+	# 			movie_details(comm[1], movie_db)
+	# 		elif comm[0] == "average_movie_rating": 
+	# 			average_movie_rating(comm[1], ratings)
+	# 		elif comm[0] == "user":
+	# 			get_user(comm[1], users)
+	# 		elif comm[0] == "user_rating":
+	# 			user_rating(comm[1], comm[2], ratings) 
+	# 		elif comm[0] == "rate":
+	# 			rate(comm[1], int(comm[2]), movie_db)
+	# 		elif comm[0] == "predict":
+	# 			predict(comm[1], ratings, movie_db)
+	# 		else: 
+	# 			print "you used a bad command, try again"
+
+
+
+
+cmdloop()
+# .use_raw_input
 
 if __name__ == '__main__':
 	main()
-
-
 
 
