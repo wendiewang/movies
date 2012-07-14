@@ -2,10 +2,12 @@
 from math import sqrt
 import correlation
 import cmd 
-import memcache 
+import memcache
 
 #g_crud = {} # current ratings user dictionary
 g_crud = memcache.Client(["localhost:11211"], debug=0) 
+
+connection = pymongo.Connection("mongodb://movie_user:password@ds033797.mongolab.com:33797/movies")
 
 def load_movie_dictionary(filename):
 	item_file = open(filename)
@@ -143,6 +145,9 @@ def main():
 	if g_crud.get("my_keys") == None: 
 		g_crud.set("my_keys", [])
 
+		#replace movie_data with mongodb 
+		movie_data = pymongo.Connection
+
 	ratings = load_rating_dictionary("../ml-100k/u.data")
 	movie_db = load_movie_dictionary("../ml-100k/u.item")
 	users = load_user_dictionary("../ml-100k/u.user")
@@ -163,7 +168,6 @@ user [user_id] -- gets you information on the user
 user_rating [movie_id] [user_id] -- gets you the rating of a specific user and movie 
 rate [movie_id] [rating] -- lets you add a movie rating to your user
 predict [movie_id] -- gives you a prediction of how much you will like the movie 
-
 enter q to quit 
 """
 	while True:
