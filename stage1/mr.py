@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 from math import sqrt
+import pymongo
+from pymongo import Connection
 import correlation
 import cmd 
 import memcache 
@@ -7,10 +9,17 @@ import memcache
 #g_crud = {} # current ratings user dictionary
 g_crud = memcache.Client(["localhost:11211"], debug=0) 
 
+connection = pymongo.Connection("mongodb://movie_user:password@ds033797.mongolab.com:33797/movies")
+
+db = connection['movies']
+
 def load_movie_dictionary(filename):
 	item_file = open(filename)
-	all_movies = {}  #outside for loop but inside function so that for loop can reference it
+	movies_db = db['movies_db']
+	#all_movies = {}  #outside for loop but inside function so that for loop can reference it
 	for line in item_file.readlines():
+		line = line.decode("latin-1")
+		line = line.encode("utf-8")
 		movie_data = {}  #each time it loops, movie_data {} becomes empty 
 		stripped = line.strip()
 		l = stripped.split("|")
@@ -37,9 +46,11 @@ def load_movie_dictionary(filename):
 		movie_data["Thriller"] = l[21]
 		movie_data["War"] = l[22]
 		movie_data["Western"] = l[23]
-		all_movies[movie_data['id']] = movie_data
+		# all_movies[movie_data['id']] = movie_data
+		movies_db.insert(movie_data)   # change to update and upsert because we only want to insert once. 
+
 	item_file.close()
-	return all_movies
+	# return all_movies
 
 def movie_details(id, all_movies):
 	movie_lookup = all_movies[id]
@@ -55,22 +66,30 @@ def movie_details(id, all_movies):
 
 def load_rating_dictionary(filename):
 	ratings = open(filename)
-	all_ratings = {}
+	ratings_db = db['ratings_db']
+	#all_ratings = {}
 	for line in ratings:
+		line = line.decode("latin-1")
+		line = line.encode("utf-8")
 		stripped = line.strip()
 		l = stripped.split("\t")
+		rating_data = {}
+		rating_data["user_id"] = l[0]
+		rating_data["movie_id"] = l[1]
+		rating_data["rating"] = l[2]
 		# if movie not in all_ratings:
-		if l[1] not in all_ratings:
-		# 	make values into rating_data dictionary, add movie as new key w/ rating_data
-			rating_data = {}
-			rating_data[l[0]] = int(l[2])
-			all_ratings[l[1]] = rating_data
-		else: # if movie is in all_ratings:
-			moviekey = all_ratings[l[1]] # 	pull out rating_data dict from that key/movie
-			moviekey[l[0]] = int(l[2]) #	add current values (l[0], l[2]) to rating_data dictionary
-			all_ratings[l[1]] = moviekey # 	put back in db under correct key/movie
+		# if l[1] not in all_ratings:
+		# # 	make values into rating_data dictionary, add movie as new key w/ rating_data
+		# 	rating_data = {}
+		# 	rating_data[l[0]] = int(l[2])
+		# 	all_ratings[l[1]] = rating_data
+		# else: # if movie is in all_ratings:
+		# 	moviekey = all_ratings[l[1]] # 	pull out rating_data dict from that key/movie
+		# 	moviekey[l[0]] = int(l[2]) #	add current values (l[0], l[2]) to rating_data dictionary
+		# 	all_ratings[l[1]] = moviekey # 	put back in db under correct key/movie
+		ratings_db.insert(rating_data)
 	ratings.close()
-	return all_ratings
+	#return all_ratings
 
 def average_movie_rating(id, all_ratings):
 	moviekey = all_ratings[id]
@@ -86,12 +105,21 @@ def average_movie_rating(id, all_ratings):
 
 def load_user_dictionary(filename):
 	users = open(filename)
+	users_db = db['users_db']
 	all_users = {}
 	for line in users:
+		user = {}
+		line = line.decode("latin-1")
+		line = line.encode("utf-8")
 		if line == None:
 			pass
 		stripped = line.strip()
 		l = stripped.split("|")
+		user["id"] = l[0]
+		user["age"] = l[1]
+		user["gender"] = l[2]
+		user["job"] = l[3]
+		users_db.insert(user)
 		all_users[l[0]] = l[1:4]
 	users.close()
 	return all_users
@@ -143,9 +171,9 @@ def main():
 	if g_crud.get("my_keys") == None: 
 		g_crud.set("my_keys", [])
 
-	ratings = load_rating_dictionary("../ml-100k/u.data")
-	movie_db = load_movie_dictionary("../ml-100k/u.item")
-	users = load_user_dictionary("../ml-100k/u.user")
+	load_rating_dictionary("../ml-100k/u.data")
+	# movie_db = load_movie_dictionary("../ml-100k/u.item")
+	# users = load_user_dictionary("../ml-100k/u.user")
 	# movie_details('43', movie_db)
 	# average_movie_rating('42', ratings)
 	# get_user('483', users)
@@ -166,28 +194,28 @@ predict [movie_id] -- gives you a prediction of how much you will like the movie
 
 enter q to quit 
 """
-	while True:
-		comm = raw_input("> ")
-		comm = comm.split(" ")
+	# while True:
+	# 	comm = raw_input("> ")
+	# 	comm = comm.split(" ")
 
-		if comm[0] == 'q':
-			break
-		else: 
-			if comm[0] == "movie": 
-				movie_details(comm[1], movie_db)
-			elif comm[0] == "average_movie_rating": 
-				average_movie_rating(comm[1], ratings)
-			elif comm[0] == "user":
-				get_user(comm[1], users)
-			elif comm[0] == "user_rating":
-				user_rating(comm[1], comm[2], ratings) 
-			elif comm[0] == "rate":
-				rate(comm[1], int(comm[2]), movie_db)
-			elif comm[0] == "predict":
-				predict(comm[1], ratings, movie_db)
-			else: 
-				print "you used a bad command, try again"
-	#try again using cmd version of raw input 
+	# 	if comm[0] == 'q':
+	# 		break
+	# 	else: 
+	# 		if comm[0] == "movie": 
+	# 			movie_details(comm[1], movie_db)
+	# 		elif comm[0] == "average_movie_rating": 
+	# 			average_movie_rating(comm[1], ratings)
+	# 		elif comm[0] == "user":
+	# 			get_user(comm[1], users)
+	# 		elif comm[0] == "user_rating":
+	# 			user_rating(comm[1], comm[2], ratings) 
+	# 		elif comm[0] == "rate":
+	# 			rate(comm[1], int(comm[2]), movie_db)
+	# 		elif comm[0] == "predict":
+	# 			predict(comm[1], ratings, movie_db)
+	# 		else: 
+	# 			print "you used a bad command, try again"
+	# #try again using cmd version of raw input 
 
 
 if __name__ == '__main__':
