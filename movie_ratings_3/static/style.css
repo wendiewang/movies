@@ -1,0 +1,28 @@
+body { 
+	background-color:#FFFFFF; 
+	font-family:"Tahoma";
+}
+
+div.moviesubmit { 
+	border: 1px solid #999;
+	width:100%; 
+	position:relative;
+}
+
+div.text { 
+	border: 1px solid #999; 
+	width: 50%; 
+	position:absolute;
+}
+
+div.input {
+	border: 1px solid #999; 
+	width: 50%; 
+	position:absolute;
+	left: 50%;
+	top: 0;
+}
+
+div.movieid {
+	position:relative;
+}

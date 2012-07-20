@@ -1,0 +1,30 @@
+<!doctype html>
+<title>michele and wendy's awesome movie rating spitteroutter</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css')}}">
+<div class="page" align='center'>
+	<div class="header" align='center'>
+		<h1>Movie Details!</h1>
+	</div>
+	<div class="moviesubmit">
+		<div class="text">
+			Movie ID:
+		</div> 
+		<div class="input">
+			<form><input type='text'>
+				  <input type='submit' value='Submit' />
+			</form>
+		</div>
+	</div>
+	<div class="movieid">
+			{{ md.movie_id }} 
+			{{ md.title }} 
+			{% for genre in md.genres %}
+				{{ genre }}
+			{% endfor %}
+			{{ avg }}
+	</div>
+</div>
+	<div class="block">
+	{% block body %} {% endblock %}
+	</div>
+</div>

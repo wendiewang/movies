@@ -28,7 +28,7 @@ class Movies(object):
     @staticmethod
     def get(movie_id):
         movie = db.movies.find_one({"_id": movie_id})
-        return Movies(movie['movie_id'], movie['title'], movie['genres'])
+        return movie
 
     def __str__(self):
         return "Movie %d: %s \n %s" % (self.movie_id, self.title, self.genres)

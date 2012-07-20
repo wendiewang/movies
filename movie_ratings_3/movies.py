@@ -16,10 +16,10 @@ def movie_details(movie_id):
     if not movie:
         print "No movie with id %d"%movie_id
 
-    print """\
+    return """\
 %d: %s
 %s"""%(movie['_id'], movie['title'], ", ".join(movie['genres']))
-    pass
+
 
 def error(msg = "Unknown command"):
     print "Error:", msg
@@ -33,7 +33,7 @@ def average_rating(movie_id):
     ratings = [ rec['rating'] for rec in rating_records ]
     avg = float(sum(ratings))/len(ratings)
 
-    print "%.2f"%(avg)
+    return "%.2f"%(avg)
 
 def user_details(user_id):
     user = User.get(user_id)
