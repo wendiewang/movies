@@ -6,17 +6,19 @@ import pymongo
 from collections import defaultdict
 import traceback
 import model
-from model import User, Movies
+from model import User, Movie
 
-global db
+db = None
 
+#1
 def movie_details(movie_id):
     movie = db.movies.find_one({"_id": movie_id})
 
     if not movie:
         print "No movie with id %d"%movie_id
 
-    return """\
+    
+    print """\
 %d: %s
 %s"""%(movie['_id'], movie['title'], ", ".join(movie['genres']))
 
@@ -27,33 +29,33 @@ def error(msg = "Unknown command"):
 def quit():
     print "Goodbye!"
     sys.exit(0)
-
+#2
 def average_rating(movie_id):
     rating_records = get_ratings(movie_id=movie_id)
     ratings = [ rec['rating'] for rec in rating_records ]
     avg = float(sum(ratings))/len(ratings)
-
     return "%.2f"%(avg)
-
+    
+#3
 def user_details(user_id):
     user = User.get(user_id)
-    print user
-
+    return user
+#4
 def user_rating(movie_id, user_id):
     rating = get_rating(movie_id, user_id)
     if not rating:
         print "Sorry, user %d has not rated movie %d"%(user_id, movie_id)
         return
     movie = get_movie(movie_id)
-    print "User %d rated movie %d (%s) at %d stars"%(\
+    return "User %d rated movie %d (%s) at %d stars"%(\
             user_id, movie_id, movie['title'],
             rating)
-
+#5
 def rate_movie(movie_id, rating):
     movie = get_movie(movie_id)
     db.ratings.update({"movie_id": movie_id, "user_id": 0},
             {"$set": {"rating": rating}}, upsert=True)
-    print "You rated movie %d: %s at %d stars."%(\
+    return "You rated movie %d: %s at %d stars."%(\
             movie_id, movie['title'],
             rating)
 
@@ -82,9 +84,19 @@ def movie_ids(user_id):
     for rates in ratings:
         movie_ids.append(rates['movie_id'])
     return movie_ids
+    
+def make_target_ratings(movie_id):
+    rated_movies = get_ratings(movie_id)
+    ratings_dict = {}
+    for each in rated_movies:
+        key = each['user_id']
+        value = each['rating']
+        ratings_dict[key] = value 
+    return ratings_dict
 
+# 6 
 def predict(movie_id):
-    target_movie = Movies.get(movie_id)
+    target_movie = Movie.get(movie_id)
     #target_movie = get_movie(movie_id)
     target_ratings = make_target_ratings(movie_id)
     # target_movie_rating = rating
@@ -116,18 +128,10 @@ def predict(movie_id):
         den += sim
 
     rating = num/den
-    print "Best guess for movie %d: %s is %.2f stars"%\
+    return "Best guess for movie %d: %s is %.2f stars"%\
             (movie_id, target_movie['title'], rating)
 
-def make_target_ratings(movie_id):
-    rated_movies = get_ratings(movie_id)
-    ratings_dict = {}
-    for each in rated_movies:
-        key = each['user_id']
-        value = each['rating']
-        ratings_dict[key] = value 
-    # print ratings_dict
-    return ratings_dict
+
 
 def parse(line, dispatch):
     tokens = line.split()
@@ -171,8 +175,6 @@ def main():
     db = db['movies']
     model.db = db
 
-    # make_target_ratings(1)
-
     dispatch = {
             "movie": (movie_details, int),
             "q": (quit,),
@@ -183,9 +185,9 @@ def main():
             "predict": (predict, int)
             }
 
-    while True:
-        line = raw_input("> ")
-        parse(line, dispatch)
+    #while True:
+    #    line = raw_input("> ")
+    #    parse(line, dispatch)
    
 if __name__ == "__main__":
     main()

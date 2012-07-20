@@ -1,30 +1,39 @@
 <!doctype html>
-<title>michele and wendy's awesome movie rating spitteroutter</title>
+<title>movie rating hazing</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css')}}">
-<div class="page" align='center'>
-	<div class="header" align='center'>
-		<h1>Movie Details!</h1>
-	</div>
-	<div class="moviesubmit">
-		<div class="text">
-			Movie ID:
-		</div> 
-		<div class="input">
-			<form><input type='text'>
-				  <input type='submit' value='Submit' />
-			</form>
-		</div>
-	</div>
-	<div class="movieid">
-			{{ md.movie_id }} 
-			{{ md.title }} 
-			{% for genre in md.genres %}
-				{{ genre }}
-			{% endfor %}
-			{{ avg }}
-	</div>
+
+<h1>class HackbrightHazing(movie_ratings):</h1>
+<div class="page">
+    <form action="{{ url_for('movie_details') }}" method="POST">
+    input movie id <input type="text" name="movie_id">
+    <input type="submit" value="get movie details">
+    </form><br>
+    <form action="{{ url_for('avg') }}" method="POST">
+    input movie id <input type="text" name="movie_id"> 
+    <input type="submit" value="get avg rating">
+    </form><br>
+    <form action="{{ url_for('user') }}" method="POST">
+    input user id <input type="text" name="user_id"> 
+    <input type="submit" value="get user details">
+    </form><br>
+    <form action="{{ url_for('user_rating') }}" method="POST">
+    input user id <input type="text" name="user_id"> 
+    input movie id <input type="text" name="movie_id"> 
+    <input type="submit" value="get the rating">
+    </form><br>
+    <form action="{{ url_for('rate_movie') }}" method="POST">
+    input movie id <input type="text" name="movie_id"> 
+    input rating <input type="text" name="rating"> 
+    <input type="submit" value="rate your movie">
+    </form><br>
+    <form action="{{ url_for('predict') }}" method="POST">
+    input movie id <input type="text" name="movie_id" value="out of service"> 
+    <input type="submit" value="predict what i will think of this movie">
+    </form>
+    
 </div>
-	<div class="block">
-	{% block body %} {% endblock %}
-	</div>
+<br><br>  
+<div class="block">
+prepare to be dazzled
+{% block body %} {% endblock %}
 </div>

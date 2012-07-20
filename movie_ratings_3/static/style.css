@@ -1,28 +1,24 @@
-body { 
-	background-color:#FFFFFF; 
-	font-family:"Tahoma";
-}
+div.bigbox      { border: 1px solid #999; width:100%; position:relative; }
+div.left        { border: 1px solid #999; width: 50%; position:absolute; }
+div.right       { border: 1px solid #999; width: 50%; position:absolute; 
+                  left: 50%; top: 0; }
 
-div.moviesubmit { 
-	border: 1px solid #999;
-	width:100%; 
-	position:relative;
-}
+body            { background: #eee; }
+div.block       { margin: 2em auto; width: 45em; border: 5px solid #ccc; 
+                  padding: 0.8em; background: white; font-family: 'Helvetica';
+                  font-family: sans-serif; text-align: center; }
+a, h1, h2       { color: #377BA8; }
+h1, h2          { font-family: 'Helvetica', serif; margin: 0; text-align: center; }
+h1              { border-bottom: 2px solid #eee; }
 
-div.text { 
-	border: 1px solid #999; 
-	width: 50%; 
-	position:absolute;
-}
+.page           { margin: 2em auto; width: 45em; border: 5px solid #ccc; 
+                  padding: 0.8em; background: white; font-family: 'Helvetica'; }
+.entries        { list-style: none; margin: 0; padding: 0; }
+.entries li     { margin: 0.8em 1.2em; }
+.entries li h2  { margin-left: -1em; }
+.add-entry      { font-size: 0.9em; border-bottom: 1px solid #ccc; }
+.add-entry dl   { font-weight: bold; }
+.metanav        { text-align: right; font-size: 0.8em; padding: 0.3em;
+                  margin-bottom: 1em; background: #fafafa; }
 
-div.input {
-	border: 1px solid #999; 
-	width: 50%; 
-	position:absolute;
-	left: 50%;
-	top: 0;
-}
-
-div.movieid {
-	position:relative;
-}
+input           { font-size: 15px; font-family: 'Helvetica'; }
