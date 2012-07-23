@@ -22,3 +22,34 @@ h1              { border-bottom: 2px solid #eee; }
                   margin-bottom: 1em; background: #fafafa; }
 
 input           { font-size: 15px; font-family: 'Helvetica'; }
+
+
+
+div.title {
+
+}
+
+div.all { 
+	width: 640px;
+	position: relative;
+	border: 0px;
+
+
+}
+
+div.left { 
+	width: 60%;
+	border: 0px;
+
+}
+
+div.right { 
+	position: absolute;
+	width: 30%;
+	left: 60%;  /* or right:0 */;
+	top: 0;
+	border: 0px;
+
+	/* height is determined by whats inside */ 
+
+}

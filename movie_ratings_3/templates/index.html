@@ -4,36 +4,58 @@
 
 <h1>class HackbrightHazing(movie_ratings):</h1>
 <div class="page">
-    <form action="{{ url_for('movie_details') }}" method="POST">
-    input movie id <input type="text" name="movie_id">
-    <input type="submit" value="get movie details">
-    </form><br>
-    <form action="{{ url_for('avg') }}" method="POST">
-    input movie id <input type="text" name="movie_id"> 
-    <input type="submit" value="get avg rating">
-    </form><br>
-    <form action="{{ url_for('user') }}" method="POST">
-    input user id <input type="text" name="user_id"> 
-    <input type="submit" value="get user details">
-    </form><br>
-    <form action="{{ url_for('user_rating') }}" method="POST">
-    input user id <input type="text" name="user_id"> 
-    input movie id <input type="text" name="movie_id"> 
-    <input type="submit" value="get the rating">
-    </form><br>
-    <form action="{{ url_for('rate_movie') }}" method="POST">
-    input movie id <input type="text" name="movie_id"> 
-    input rating <input type="text" name="rating"> 
-    <input type="submit" value="rate your movie">
-    </form><br>
-    <form action="{{ url_for('predict') }}" method="POST">
-    input movie id <input type="text" name="movie_id" value="out of service"> 
-    <input type="submit" value="predict what i will think of this movie">
+    <div class="title">input movie id</div>
+    <div class="all">
+        <form action="{{ url_for('movie_details') }}" method="POST">
+        <div class="left"><input type="text" name="movie_id"> </div>
+        <div class="right"><input type="submit" value="get movie details"> </div>
+        </form>
+    </div><br><br>
+    <div class="title">input movie id</div>
+    <div class="all">
+        <form action="{{ url_for('avg') }}" method="POST">
+        <div class="left"><input type="text" name="movie_id" value=> </div>
+        <div class="right"><input type="submit" value="get avg rating"> </div>
+        </form>
+    </div><br><br>
+    <div class="title">input user id</div>
+    <div class="all">
+        <form action="{{ url_for('user') }}" method="POST">
+        <div class="left"><input type="text" name="user_id"> </div>
+        <div class="right"><input type="submit" value="get user details"> </div>
+        </form>
+    </div><br><br>
+    <div class="title">input user id and movie id</div>
+    <div class="all">
+        <form action="{{ url_for('user_rating') }}" method="POST">
+        <div class="left"><input type="text" name="user_id">
+        <input type="text" name="movie_id"></div>
+        <div class="right"><input type="submit" value="get the rating"></div>
+        </form>
+    </div><br><br>
+    <div class="title">input movie id and select a rating</div>
+    <div class="all">
+        <form action="{{ url_for('rate_movie') }}" method="POST">
+        <div class="left"><input type="text" name="movie_id">
+            <select name="rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            </select>
+        </div>
+        <div class="right"><input type="submit" value="rate your movie"></div>
+        </form>
+    </div><br><br>
+    <div class="title">input movie id</div>
+    <div class="all">
+        <form action="{{ url_for('predict') }}" method="POST">
+        <div class="left"><input type="text" name="movie_id"></div>
+        <div class="right"><input type="submit" value="predict what i will think of this movie"></div>
     </form>
-    
+    </div><br>
 </div>
-<br><br>  
 <div class="block">
-prepare to be dazzled
 {% block body %} {% endblock %}
 </div>

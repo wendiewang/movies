@@ -128,9 +128,13 @@ def predict(movie_id):
         den += sim
 
     rating = num/den
-    return "Best guess for movie %d: %s is %.2f stars"%\
-            (movie_id, target_movie['title'], rating)
+    return "%.2f" %(rating)
+    # return "Best guess for movie %d: %s is %.2f stars"%\
+    #         (movie_id, target_movie['title'], rating)
 
+def movie_title(movie_id):
+    movie = db.movies.find_one({"_id": movie_id})
+    return "%s" %(movie['title'])
 
 
 def parse(line, dispatch):
